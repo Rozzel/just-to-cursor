@@ -1,0 +1,62 @@
+{
+	"name": "just-file",
+	"displayName": "Justfile",
+	"description": "Justfile language support for Cursor",
+	"version": "1.0.0",
+	"publisher": "local",
+	"engines": {
+		"vscode": "^1.74.0"
+	},
+	"categories": [
+		"Programming Languages"
+	],
+	"contributes": {
+		"languages": [
+			{
+				"id": "just",
+				"aliases": [
+					"Justfile"
+				],
+				"extensions": [
+					".just",
+					".justfile"
+				],
+				"filenames": [
+					"justfile",
+					"Justfile",
+					".justfile",
+					"JUSTFILE"
+				],
+				"filenamePatterns": [
+					"**/justfile",
+					"**/Justfile",
+					"**/.justfile",
+					"**/*.just"
+				],
+				"configuration": "./language-configuration.json"
+			}
+		],
+		"grammars": [
+			{
+				"language": "just",
+				"scopeName": "source.just",
+				"path": "./syntaxes/just.tmLanguage.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "7c3e9f12-4a81-4d6b-9e20-b4c81a0d9170",
+		"publisherDisplayName": "local",
+		"publisherId": "7c3e9f12-4a81-4d6b-9e20-b4c81a0d9170",
+		"isApplicationScoped": false,
+		"isMachineScoped": false,
+		"isBuiltin": false,
+		"installedTimestamp": 1789495200000,
+		"pinned": true,
+		"source": "resource",
+		"targetPlatform": "undefined",
+		"isPreReleaseVersion": false,
+		"hasPreReleaseVersion": false,
+		"preRelease": false
+	}
+}
