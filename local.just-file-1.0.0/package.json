@@ -4,6 +4,7 @@
 	"description": "Justfile language support for Cursor",
 	"version": "1.0.0",
 	"publisher": "local",
+	"license": "Unlicense",
 	"engines": {
 		"vscode": "^1.74.0"
 	},
