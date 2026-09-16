@@ -1,0 +1,103 @@
+#!/usr/bin/env -S just --justfile
+
+# Reference demo of Justfile syntax highlighting
+# Comments, shebang, keywords, strings, recipes
+
+# --- imports and modules ---
+import? 'optional.just'
+import "shared.just"
+
+mod? optional
+mod utils "utils.just"
+
+# --- settings ---
+set shell := ["bash", "-cu"]
+set dotenv-load := true
+set positional-arguments := false
+set export := false
+
+# --- variables ---
+project := "just-demo"
+version := "1.0.0"
+debug := false
+workers := 4
+greeting := "Hello, \"world\"!"
+raw_path := 'C:\Users\demo\project'
+banner := """
+  Multi-line
+  double-quoted string
+"""
+note := '''
+  Multi-line
+  single-quoted string
+'''
+
+export PATH := env_var_or_default("PATH", "/usr/bin")
+export CI := "false"
+unexport UNUSED_VAR
+
+name := uppercase(project) + "-" + version
+home := home_dir() / ".cache" / project
+colored := RED + BOLD + "error" + NORMAL
+joined := "a" + "b" && "c" || "d"
+
+# --- aliases ---
+alias b := build
+alias t := test
+alias c := clean
+
+# --- attributes and recipes ---
+[private]
+[group('meta')]
+default:
+    @just --list
+
+# Quiet recipe (@) and parameters
+@build target="release" +flags:
+    echo "Building {{target}} for {{project}}"
+    cargo build --{{target}} {{flags}}
+
+# Default parameters and variadic (+)
+test filter="" +args:
+    cargo test {{filter}} -- {{args}}
+
+# Error suppression (-) and interpolation
+clean:
+    -rm -rf target/
+    @echo "Cleaned {{justfile_directory()}}"
+
+# Conditionals, comparison operators, and builtins
+check-os:
+    @if {{os()}} == "macos"; then \
+      echo "macOS / {{arch()}} / cpus={{num_cpus()}}"; \
+    else \
+      echo "Other: {{os_family()}}"; \
+    fi
+
+# Strings, escapes, and {{ }} expressions
+greet who=greeting:
+    @echo "{{who}}"
+    @echo '{{uppercase(who)}}'
+    @echo "path={{absolute_path(".")}} stem={{file_stem(justfile())}}"
+    @echo "uuid={{uuid()}} sha={{sha256(version)}}"
+
+# Color constants and styles
+colors:
+    @echo "{{BLACK}}black{{NORMAL}}"
+    @echo "{{RED}}red{{GREEN}}green{{YELLOW}}yellow{{NORMAL}}"
+    @echo "{{BLUE}}blue{{MAGENTA}}magenta{{CYAN}}cyan{{WHITE}}white{{NORMAL}}"
+    @echo "{{BOLD}}{{UNDERLINE}}styled{{NORMAL}}"
+
+# Recipe dependencies
+[confirm]
+release: clean build test
+    @echo "Release {{version}} ready in {{invocation_directory()}}"
+
+# Expression-level if/else example
+status := if debug == true { "debug" } else { "release" }
+
+print-status:
+    @echo "mode={{status}} env={{env("HOME", "/tmp")}}"
+    @echo "exists={{path_exists(home)}}"
+    @echo "trim={{trim("  padded  ")}}"
+    @echo "regex ok={{if "abc" =~ "^a" { "yes" } else { "no" }}}"
